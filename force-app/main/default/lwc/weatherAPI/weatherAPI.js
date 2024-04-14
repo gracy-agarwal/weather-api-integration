@@ -3,6 +3,7 @@ import getWeather from '@salesforce/apex/WeatherAPI.getWeather';
 
 export default class WeatherAPI extends LightningElement {
     city;
+    region;
     country;
     temperature;
     condition;
@@ -21,27 +22,25 @@ export default class WeatherAPI extends LightningElement {
     async buttonClick() {       
         getWeather({ city: this.city }).then((response) => {
             this.data = true;
-            if (response) {
-                this.error = null;
-                console.log("###Response : " + response);
-                let parsedData = JSON.parse(response);
-                console.log("###parsedData : " + parsedData);
+            this.error = null;
 
-                this.country = parsedData.location.country;
-                
-                this.temperature = parsedData.current.temp_c;
-                this.imageURL = parsedData.current.condition.icon;
-                this.condition = parsedData.current.condition.text;
-                this.maxTemperature = parsedData.forecast.forecastday[0].day.maxtemp_c;
-                this.minTemperature = parsedData.forecast.forecastday[0].day.mintemp_c;
+            console.log("###Response : " + response);
+            let parsedData = JSON.parse(response);
 
-                this.updateMap(parsedData.location.lon, parsedData.location.lat);
-            }
+            this.country = parsedData.location.country;
+            this.region = parsedData.location.region;
+            
+            this.temperature = parsedData.current.temp_c;
+            this.imageURL = parsedData.current.condition.icon;
+            this.condition = parsedData.current.condition.text;
+            this.maxTemperature = parsedData.forecast.forecastday[0].day.maxtemp_c;
+            this.minTemperature = parsedData.forecast.forecastday[0].day.mintemp_c;
+
+            this.updateMap(parsedData.location.lon, parsedData.location.lat);
         })
         .catch((error) => {
             this.data = null;
             this.error = error;
-            // this.condition = 'No matching location found.';
             console.log('###Error : ' + JSON.stringify(error));
         });
     }
@@ -56,7 +55,7 @@ export default class WeatherAPI extends LightningElement {
                         Longitude 
                     },
                 icon: this.marker, 
-                title: this.city + ' - '+ this.country,
+                title: this.city + ' - ' + this.region + ' - ' + this.country,
             }];
         }else{
             this.mapMarkers = [
