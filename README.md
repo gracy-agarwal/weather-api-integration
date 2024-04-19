@@ -7,7 +7,7 @@ This Lightning Web Component (LWC) allows users to retrieve weather information 
 - Enter a city name to retrieve current weather conditions.
 - Display current temperature, condition, and an icon representing the weather condition.
 - Display the day's highest and lowest temperatures.
-- Display the Google Map with a marker.
+- Displays the location using Google Maps with a marker.
 
 ## Steps to follow before cloning the repo into the org:
 
